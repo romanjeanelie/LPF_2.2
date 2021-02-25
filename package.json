@@ -1,0 +1,22 @@
+{
+  "name": "LPF-2.0",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cssnano": "^4.1.10",
+    "sass": "^1.32.8"
+  },
+  "dependencies": {
+    "assets": "^3.0.1",
+    "gsap": "^3.6.0",
+    "parcel": "^1.12.4",
+    "three": "^0.125.2"
+  }
+}

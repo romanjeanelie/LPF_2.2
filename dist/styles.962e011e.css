@@ -1,0 +1,385 @@
+@font-face {
+    font-family: 'eesti';
+    src: url('/HelveticaNeueLTProRoman.6732a2cb.woff2') format('woff2'),
+    url('/HelveticaNeueLTProRoman.f927a7c4.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@charset "UTF-8";
+/*─────────────────────────────────────────────────────────────────────────────────────────────────*/
+/*─────────────────────────────────────────────────────────────────────────────────────────────────*/
+/*─
+/*─                                                                                      RESET
+/*─
+/*─────────────────────────────────────────────────────────────────────────────────────────────────*/
+/*─────────────────────────────────────────────────────────────────────────────────────────────────*/
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: none;
+  /*─ Debug font size on iphone when landscape orientation ─*/
+  -webkit-font-smoothing: subpixel-antialiased;
+  /*─ Debug safari font weight when fixed element on the page ─*/
+  -webkit-font-smoothing: antialiased;
+  /*─ idem : Debug safari font weight when fixed element on the page ─*/
+}
+
+html, body, nav, header, footer, div, span,
+h1, h2, h3, p,
+a, img,
+ul, li,
+table, form, label, input, textarea, select, button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  list-style: none;
+}
+
+input, textarea, select, button {
+  display: block;
+  box-sizing: border-box;
+  border-radius: 0;
+  outline: none;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+input[type=submit]:hover,
+button:hover {
+  cursor: pointer;
+}
+
+input::-ms-clear {
+  display: none;
+  /*─ IE11 → remove cross to close ─*/
+}
+
+textarea {
+  overflow: auto;
+  /*─ Hide scroll bar on IE ─*/
+}
+
+a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+img, video, svg, picture {
+  display: block;
+}
+
+img, video {
+  width: 100%;
+  height: auto;
+}
+
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: itc-avant-garde-gothic-pro, sans-serif;
+  color: #fff;
+  background-color: #000;
+}
+
+canvas {
+  display: block;
+}
+
+#container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main {
+  position: absolute;
+  top: 80px;
+  right: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.time__wrapper {
+  position: relative;
+  margin-bottom: 0px;
+  font-size: 20px;
+  padding: 20px;
+  cursor: pointer;
+  opacity: 0.25;
+  transition: 0.25s;
+}
+.time__wrapper p {
+  transition: 0.25s;
+}
+.time__wrapper .info {
+  transition: 0.25s;
+}
+.time__wrapper:hover {
+  opacity: 1 !important;
+}
+.time__wrapper:hover #placeholder {
+  transform: translateY(100%);
+  opacity: 0;
+}
+.time__wrapper:hover .play {
+  transform: translateY(0);
+  opacity: 1;
+}
+.time__wrapper:hover .date-play {
+  opacity: 1;
+  transform: translateY(0);
+}
+.time__wrapper:active {
+  transform: scale(0.95);
+}
+.time__wrapper:active p {
+  opacity: 0.5;
+}
+.time__wrapper:active .info {
+  opacity: 0.5;
+}
+
+.link-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.link-wrapper.disabled {
+  pointer-events: none;
+}
+
+.hour {
+  margin-right: 64px;
+}
+
+.info {
+  position: relative;
+}
+
+#placeholder {
+  transition: 0.3s;
+}
+
+.play {
+  opacity: 0;
+  bottom: 0;
+  position: absolute;
+  transform: translateY(-100%);
+  transition: 0.3s;
+}
+
+.date-play {
+  opacity: 0;
+  position: absolute;
+  transform: translateY(-100%);
+  transition: 0.3s;
+  font-size: 18px;
+  bottom: 0;
+  color: gray !important;
+}
+
+/* Others */
+.join {
+  position: fixed;
+  bottom: 35px;
+  right: 60px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  transition: 0.3s;
+}
+.join:before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  transform-origin: center left;
+  transform: scaleX(0);
+  transition: 0.4s ease-out;
+}
+.join:hover:before {
+  transform: scaleX(1);
+  transform-origin: center right;
+  transition: 0.3s;
+}
+.join:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+.title {
+  position: fixed;
+  top: 80px;
+  left: 40px;
+  font-size: 24px;
+  opacity: 0.6;
+}
+
+.date {
+  position: fixed;
+  bottom: 35px;
+  left: 40px;
+  filter: invert(0);
+}
+.date p {
+  transition: 0.5s;
+  transition-delay: 0.2s;
+}
+.date p:first-child {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1050px) {
+  .main {
+    right: 100px;
+  }
+}
+@media (max-width: 600px) {
+  body {
+    height: 1800px;
+  }
+
+  body:before {
+    position: fixed;
+    content: "";
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    background: linear-gradient(0deg, black 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 1;
+  }
+
+  body:after {
+    position: fixed;
+    content: "";
+    top: 0;
+    height: 100px;
+    width: 100%;
+    background: linear-gradient(180deg, black 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 1;
+  }
+
+  .link-wrapper {
+    pointer-events: none;
+  }
+
+  .active .link-wrapper {
+    pointer-events: unset;
+  }
+
+  .active .link-wrapper.disabled {
+    pointer-events: none;
+  }
+
+  #container {
+    display: none;
+  }
+
+  .main {
+    position: unset;
+    padding-top: 100px;
+  }
+
+  .title {
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    opacity: 1;
+  }
+
+  .time__wrapper {
+    font-size: 40px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 80px;
+  }
+  .time__wrapper .hour {
+    margin-right: 32px;
+  }
+  .time__wrapper:active {
+    transform: scale(0.9);
+  }
+  .time__wrapper.active {
+    opacity: 0.5;
+  }
+
+  .date,
+.join,
+.title {
+    z-index: 2;
+  }
+
+  .date {
+    font-size: 13px;
+    bottom: 20px;
+    left: 20px;
+    opacity: 0.7;
+  }
+  .date p:first-child {
+    margin-bottom: 6px;
+  }
+
+  .date-play {
+    bottom: 6px;
+  }
+
+  .join {
+    font-size: 13px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  canvas {
+    pointer-events: none;
+  }
+}
+@media (min-height: 1000px) {
+  .main {
+    top: 225px;
+  }
+}
+@media (min-width: 1800px) {
+  .main {
+    right: 20vw;
+  }
+
+  .time__wrapper {
+    font-size: 40px;
+  }
+}
+
+/*# sourceMappingURL=/styles.962e011e.css.map */
