@@ -316,7 +316,7 @@ canvas {
 
 @media (min-height: 1000px) {
   .main {
-    top: 225px;
+    top: 155px;
   }
 }
 
@@ -325,6 +325,7 @@ canvas {
     right: 20vw;
   }
   .time__wrapper {
+    margin-bottom: 10px;
     font-size: 40px;
   }
 }
