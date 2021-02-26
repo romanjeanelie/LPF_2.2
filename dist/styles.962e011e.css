@@ -120,6 +120,21 @@ canvas {
   height: 100vh;
 }
 
+.loading .title,
+.loading .time__wrapper,
+.loading .date,
+.loading .join {
+  opacity: 0;
+}
+
+.desc {
+  display: none;
+}
+
+canvas {
+  transition: opacity 3s;
+}
+
 .main {
   position: absolute;
   top: 80px;
@@ -128,20 +143,27 @@ canvas {
   flex-direction: column;
 }
 
+canvas {
+  pointer-events: none;
+}
+
 .time__wrapper {
-  position: relative;
   margin-bottom: 0px;
-  font-size: 20px;
   padding: 20px;
-  cursor: pointer;
+  position: relative;
+  font-size: 20px;
   opacity: 0.25;
+  cursor: pointer;
   transition: 0.25s;
 }
-.time__wrapper p {
+.time__wrapper .hour {
   transition: 0.25s;
 }
 .time__wrapper .info {
   transition: 0.25s;
+}
+.time__wrapper #placeholder {
+  transition: 0.3s;
 }
 .time__wrapper:hover {
   opacity: 1 !important;
@@ -184,27 +206,21 @@ canvas {
 .info {
   position: relative;
 }
-
-#placeholder {
-  transition: 0.3s;
-}
-
-.play {
+.info .play {
+  position: absolute;
   opacity: 0;
   bottom: 0;
-  position: absolute;
   transform: translateY(-100%);
   transition: 0.3s;
 }
-
-.date-play {
-  opacity: 0;
+.info .date-play {
   position: absolute;
+  bottom: 0;
   transform: translateY(-100%);
-  transition: 0.3s;
+  opacity: 0;
   font-size: 18px;
-  bottom: 0;
-  color: gray !important;
+  color: gray;
+  transition: 0.3s;
 }
 
 /* Others */
@@ -229,6 +245,15 @@ canvas {
   transform: scaleX(0);
   transition: 0.4s ease-out;
 }
+.join:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(50%, -50%);
+}
 .join:hover:before {
   transform: scaleX(1);
   transform-origin: center right;
@@ -245,6 +270,7 @@ canvas {
   left: 40px;
   font-size: 24px;
   opacity: 0.6;
+  transition: 0.4s;
 }
 
 .date {
@@ -252,6 +278,7 @@ canvas {
   bottom: 35px;
   left: 40px;
   filter: invert(0);
+  color: #d0b64e;
 }
 .date p {
   transition: 0.5s;
@@ -259,6 +286,18 @@ canvas {
 }
 .date p:first-child {
   margin-bottom: 12px;
+}
+
+.isMobile .link-wrapper {
+  pointer-events: none;
+}
+
+.isMobile .clicked .link-wrapper {
+  pointer-events: unset;
+}
+
+.isMobile .active .link-wrapper.disabled {
+  pointer-events: none;
 }
 
 @media (max-width: 1050px) {
@@ -269,6 +308,15 @@ canvas {
 @media (max-width: 600px) {
   body {
     height: 1800px;
+  }
+
+  #container {
+    display: none;
+  }
+
+  .main {
+    position: unset;
+    padding-top: 100px;
   }
 
   body:before {
@@ -291,41 +339,13 @@ canvas {
     z-index: 1;
   }
 
-  .link-wrapper {
-    pointer-events: none;
-  }
-
-  .active .link-wrapper {
-    pointer-events: unset;
-  }
-
-  .active .link-wrapper.disabled {
-    pointer-events: none;
-  }
-
-  #container {
-    display: none;
-  }
-
-  .main {
-    position: unset;
-    padding-top: 100px;
-  }
-
-  .title {
-    top: 15px;
-    left: 15px;
-    font-size: 16px;
-    opacity: 1;
-  }
-
   .time__wrapper {
+    margin-bottom: 80px;
     font-size: 40px;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 80px;
   }
   .time__wrapper .hour {
     margin-right: 32px;
@@ -337,10 +357,26 @@ canvas {
     opacity: 0.5;
   }
 
-  .date,
-.join,
-.title {
-    z-index: 2;
+  .desc {
+    display: block;
+    text-transform: uppercase;
+    margin: 90px auto;
+    text-align: justify;
+    font-size: 12px;
+    max-width: 60vw;
+    opacity: 0.8;
+  }
+
+  .title {
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    opacity: 1;
+    filter: unset;
+  }
+
+  .scrolled .title {
+    opacity: 0.1 !important;
   }
 
   .date {
@@ -354,7 +390,7 @@ canvas {
   }
 
   .date-play {
-    bottom: 6px;
+    bottom: 6px !important;
   }
 
   .join {
@@ -363,8 +399,10 @@ canvas {
     right: 20px;
   }
 
-  canvas {
-    pointer-events: none;
+  .date,
+.join,
+.title {
+    z-index: 2;
   }
 }
 @media (min-height: 1000px) {

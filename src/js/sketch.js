@@ -1,21 +1,25 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+import Animations from "./animations";
+
 import Light from "./light";
 import Triangle from "./triangle";
 
+import SetDate from "./setDate";
+import Mobiles from "./mobiles.js";
+
+import { gsap } from "gsap";
 import { TweenMax as TM, Power3 } from "gsap/all";
 
 export default class Sketch {
   constructor(options) {
     this.container = options.dom;
 
-    // this.listColors = options.listColors;
-    // this.listDateColors = options.listDateColors;
-
     this.titleEl = options.titleEl;
     this.dateEl = options.dateEl;
     this.timeEls = options.timeEls;
+    this.descEl = options.descEl;
 
     // Utils
     this.hoverEased = { value: 0.1 };
@@ -43,6 +47,7 @@ export default class Sketch {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setClearColor("#030303");
     this.container.appendChild(this.renderer.domElement);
+    this.renderer.domElement.classList.add("webgl");
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -53,12 +58,44 @@ export default class Sketch {
     // Objects
     this.triangle = new Triangle(this.options, this.scene);
 
+    // Animation
+    // this.animations = new Animations(this.options);
+
+    this.loadedEased = { value: 0 };
+    this.indexLoaded = 0;
+
+    // Utils
+    this.setDate = new SetDate(this.options);
+    this.mobiles = new Mobiles(this.options);
+
+    this.eventListener();
     this.resize();
     this.setupResize();
     this.computeHoverEased();
-    this.checkScrollOnMobile();
-    this.checkClickOnMobile();
+    this.mobiles.checkIsMobile();
+    this.mobiles.checkScrollOnMobile();
+    this.mobiles.checkClickOnMobile();
     this.render();
+  }
+
+  eventListener() {
+    // Animate when assets are loaded
+    this.computeLoadingEased();
+
+    gsap.from(".desc", { duration: 1, opacity: 0 });
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        // document.body.classList.remove("loading");
+        this.indexLoaded = 2;
+        this.computeLoadingEased();
+        this.tl = gsap.timeline();
+        this.tl.to(".time__wrapper", { duration: 4, opacity: 0.25 });
+        this.tl.to(".date", { duration: 3, opacity: 1 }, "-=3");
+        this.tl.to(".join", { duration: 1, opacity: 1 }, "-=2");
+        this.tl.to(".title", { duration: 1, opacity: 0.6 }, "-=2");
+      }, 100);
+    });
   }
 
   setupResize() {
@@ -86,42 +123,23 @@ export default class Sketch {
     });
   }
 
-  checkScrollOnMobile() {
-    const intersection = 300;
-
-    // At first
-    setTimeout(() => this.timeEls[1].classList.add("active"), 500);
-
-    window.addEventListener("scroll", () => {
-      this.timeEls.forEach((timeEl) => {
-        const position = timeEl.getBoundingClientRect().y;
-        if (position < intersection && position > 100) {
-          timeEl.classList.add("active");
-        } else {
-          timeEl.classList.remove("active");
-        }
-      });
-      console.log(window.scrollY);
-      if (window.scrollY > 100) {
-        document.body.classList.add("scrolled");
-      }
-    });
-  }
-
-  checkClickOnMobile() {
-    this.timeEls.forEach((timeEl) => {
-      timeEl.addEventListener("click", () => {
-        this.timeEls.forEach((el) => {
-          el.classList.remove("active");
-          console.log(el);
-        });
-        timeEl.classList.add("active");
-      });
+  computeLoadingEased() {
+    TM.to(this.loadedEased, 4.7, {
+      value: this.indexLoaded,
+      ease: Power3,
     });
   }
 
   render() {
     this.elapsedTime = this.clock.getElapsedTime();
+
+    // Check if page is loaded
+
+    // this.camera.position.z = this.hoverEased.value * this.loadedEased.value * 2;
+    this.camera.position.z = this.hoverEased.value * 2;
+    this.camera.position.x = this.hoverEased.value / 2;
+
+    // console.log(this.loadedEased.value);
 
     // Invert color title + date
     this.dateEl.style.filter = `invert(${this.hoverEased.value - 0.4})`;
@@ -131,11 +149,9 @@ export default class Sketch {
     this.light.animate(this.elapsedTime);
 
     // Animate triangle
-    this.triangle.animate(this.elapsedTime, this.hoverEased.value);
+    this.triangle.animate(this.elapsedTime, this.hoverEased.value, this.loadedEased.value);
 
     // Animate camera
-    this.camera.position.z = this.hoverEased.value * 2;
-    this.camera.position.x = this.hoverEased.value / 2;
 
     // Update controls
     this.controls.update();

@@ -38,11 +38,12 @@ export default class Triangle {
     this.material.matcap = this.matCapTexture;
   }
 
-  animate(time, hoverEased) {
-    this.mesh.rotation.y = time * 0.005;
-    this.mesh.rotation.x = time * 0.005;
+  animate(time, hoverEased, loadedEased) {
+    // this.mesh.rotation.y = time * 0.005;
+    // this.mesh.rotation.x = time * 0.005;
     // this.mesh.rotation.x = time * 0.005 + hoverEased * 5;
-    this.mesh.rotation.y = time * 0.005 + hoverEased * 2;
+    this.mesh.position.y = -2 + loadedEased;
+    this.mesh.rotation.y = 0.005 + hoverEased * 2;
     this.mesh.position.z = 1.5 * hoverEased;
 
     this.material.opacity = hoverEased;

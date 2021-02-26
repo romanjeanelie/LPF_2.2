@@ -1,29 +1,56 @@
+.loading {
+  .title,
+  .time__wrapper,
+  .date,
+  .join {
+    opacity: 0;
+  }
+}
+
+.desc {
+  display: none;
+}
+
+canvas {
+  transition: opacity 3s;
+}
+
 .main {
   position: absolute;
   top: 80px;
   right: 250px;
   display: flex;
   flex-direction: column;
-  // overflow: hidden;
 }
 
+canvas {
+  pointer-events: none;
+}
+
+// Times Elements
 .time__wrapper {
+  margin-bottom: 0px;
+  padding: 20px;
   position: relative;
 
-  margin-bottom: 0px;
   font-size: 20px;
-  padding: 20px;
-  cursor: pointer;
   opacity: 0.25;
+
+  cursor: pointer;
   transition: 0.25s;
-  p {
+
+  .hour {
     transition: 0.25s;
   }
   .info {
     transition: 0.25s;
   }
+  #placeholder {
+    transition: 0.3s;
+  }
 
   &:hover {
+    // Need important for mobile (conflict with active class)
     opacity: 1 !important;
     #placeholder {
       transform: translateY(100%);
@@ -38,6 +65,7 @@
       transform: translateY(0);
     }
   }
+
   &:active {
     p {
       opacity: 0.5;
@@ -64,28 +92,22 @@
 
 .info {
   position: relative;
-}
-
-#placeholder {
-  transition: 0.3s;
-}
-
-.play {
-  opacity: 0;
-  bottom: 0;
-  position: absolute;
-  transform: translateY(-100%);
-  transition: 0.3s;
-}
-
-.date-play {
-  opacity: 0;
-  position: absolute;
-  transform: translateY(-100%);
-  transition: 0.3s;
-  font-size: 18px;
-  bottom: 0;
-  color: gray !important;
+  .play {
+    position: absolute;
+    opacity: 0;
+    bottom: 0;
+    transform: translateY(-100%);
+    transition: 0.3s;
+  }
+  .date-play {
+    position: absolute;
+    bottom: 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    font-size: 18px;
+    color: gray;
+    transition: 0.3s;
+  }
 }
 
 /* Others */
@@ -99,6 +121,7 @@
   line-height: 1.5;
   transition: 0.3s;
 
+  // Underline
   &:before {
     content: "";
     position: absolute;
@@ -110,6 +133,16 @@
     transform-origin: center left;
     transform: scaleX(0);
     transition: 0.4s ease-out;
+  }
+  // Make clickable zone bigger
+  &:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    width: 200%;
+    height: 200%;
+    transform: translate(50%, -50%);
   }
   &:hover:before {
     transform: scaleX(1);
@@ -128,6 +161,7 @@
   left: 40px;
   font-size: 24px;
   opacity: 0.6;
+  transition: 0.4s;
 }
 
 .date {
@@ -135,6 +169,7 @@
   bottom: 35px;
   left: 40px;
   filter: invert(0);
+  color: #d0b64e;
   p {
     transition: 0.5s;
     transition-delay: 0.2s;
@@ -145,46 +180,35 @@
   }
 }
 
+// Set hover / click links for mobiles and tablets
+
+.isMobile .link-wrapper {
+  pointer-events: none;
+}
+
+.isMobile .clicked .link-wrapper {
+  pointer-events: unset;
+}
+
+.isMobile .active .link-wrapper.disabled {
+  pointer-events: none;
+}
+
+//
+
+// Media Queries for tablets
+
 @media (max-width: 1050px) {
   .main {
     right: 100px;
   }
 }
 
+// Media Queries for mobiles
+
 @media (max-width: 600px) {
-  // Mobile overlay down & up
   body {
     height: 1800px;
-  }
-  body:before {
-    position: fixed;
-    content: "";
-    bottom: 0;
-    height: 100px;
-    width: 100%;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-    z-index: 1;
-  }
-  body:after {
-    position: fixed;
-    content: "";
-    top: 0;
-    height: 100px;
-    width: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-    z-index: 1;
-  }
-
-  .link-wrapper {
-    pointer-events: none;
-  }
-
-  .active .link-wrapper {
-    pointer-events: unset;
-  }
-
-  .active .link-wrapper.disabled {
-    pointer-events: none;
   }
 
   #container {
@@ -196,20 +220,36 @@
     padding-top: 100px;
   }
 
-  .title {
-    top: 15px;
-    left: 15px;
-    font-size: 16px;
-    opacity: 1;
+  // Black overlay bottom
+  body:before {
+    position: fixed;
+    content: "";
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 1;
   }
 
+  // Black overlay top
+  body:after {
+    position: fixed;
+    content: "";
+    top: 0;
+    height: 100px;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 1;
+  }
+
+  // Style times elements
   .time__wrapper {
+    margin-bottom: 80px;
     font-size: 40px;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 80px;
     .hour {
       margin-right: 32px;
     }
@@ -218,26 +258,31 @@
     }
     &.active {
       opacity: 0.5;
-      // #placeholder {
-      //   transform: translateY(100%);
-      //   opacity: 0;
-      // }
-      // .play {
-      //   transform: translateY(0);
-      //   opacity: 1;
-      // }
-      // .date-play {
-      //   opacity: 1;
-      //   transform: translateY(0);
-      // }
     }
   }
 
-  // Move front date & joint for the mobile overlay
-  .date,
-  .join,
+  // Other elements
+  .desc {
+    // position: absolute;
+    display: block;
+    text-transform: uppercase;
+    margin: 90px auto;
+    text-align: justify;
+    font-size: 12px;
+    max-width: 60vw;
+    opacity: 0.8;
+  }
+
   .title {
-    z-index: 2;
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    opacity: 1;
+    filter: unset;
+  }
+
+  .scrolled .title {
+    opacity: 0.1 !important;
   }
 
   .date {
@@ -251,19 +296,23 @@
   }
 
   .date-play {
-    bottom: 6px;
+    bottom: 6px !important;
   }
   .join {
     font-size: 13px;
     bottom: 20px;
     right: 20px;
   }
-  canvas {
-    pointer-events: none;
+
+  // Change z index date & join for the mobile overlay
+  .date,
+  .join,
+  .title {
+    z-index: 2;
   }
 }
 
-// Big screens
+// Media queries for big screens
 
 @media (min-height: 1000px) {
   .main {
